@@ -1,0 +1,83 @@
+// SCSS Auto @font-face Generator v1.0.0
+// All Rights Reserved Movalipa 2022
+// https://github.com/movalipa/font-face-generator
+@use "sass:list";
+@use "sass:map";
+
+// Config
+$name: "Roboto"; // Font name (PascalCase)
+$dir: "./"; // Font Files directory path
+$weights: "Thin", "Light", "Regular", "Medium", "Bold", "Black"; // Available Weights
+$italic: true; // true or false
+$file_types: "ttf"; // File type extentions(It can be more than one)
+
+// do not change these variables
+$valid_file_types: "woff", "woff2", "ttf", "otf", "eot", "svg";
+$file_type_Formats: (
+  "woff": "woff",
+  "woff2": "woff2",
+  "ttf": "truetype",
+  "otf": "opentype",
+  "eot": "embedded-opentype",
+  "svg": "svg",
+);
+$valid_weights: (
+  "Thin": 100,
+  "ExtraLight": 200,
+  "Light": 300,
+  "Regular": 400,
+  "Medium": 500,
+  "SemiBold": 600,
+  "Bold": 700,
+  "ExtraBold": 800,
+  "Black": 900,
+);
+
+/* Auto Generated @font-face */
+/* ----- #{$name} ----- */
+$w: "";
+@each $weight in $weights {
+  $w: $w #{map.get($valid_weights, $weight)};
+}
+/* Available Weights :#{$w} */
+
+@if $italic {
+  /* Italic Included */
+} @else {
+  /* Italic NOT Included */
+}
+
+// @font-face Generator
+@each $weight in $weights {
+  $src: local($name), local($name + "-" + $weight);
+  $srcItalic: local($name), local($name + "-" + $weight + "Italic");
+  @each $file_type in $file_types {
+    @if not list.index($valid_file_types, $file_type) {
+      @error "#{$file_type} is not a valid type. Expected one of #{$valid_file_types}.";
+    }
+    $src: $src,
+      (
+        url($dir + $name + "-" + $weight + "." + $file_type)
+          format(map.get($file_type_Formats, $file_type))
+      );
+    $srcItalic: $srcItalic,
+      (
+        url($dir + $name + "-" + $weight + "Italic" + "." + $file_type)
+          format(map.get($file_type_Formats, $file_type))
+      );
+  }
+  @font-face {
+    font-family: $name;
+    src: $src;
+    font-weight: map.get($valid_weights, $weight);
+    font-style: normal;
+  }
+  @if $italic {
+    @font-face {
+      font-family: $name;
+      src: $srcItalic;
+      font-weight: map.get($valid_weights, $weight);
+      font-style: italic;
+    }
+  }
+}
